@@ -1,0 +1,11 @@
+main: main.Main
+name: Beacon
+author: ExpeditiousReadr
+version: 1
+api-version: 1.13
+
+commands:
+  blist:
+  bwhitelist:
+  serialize:
+  checkdistance:
