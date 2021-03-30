@@ -14,14 +14,9 @@ import main.Main;
 public class IsBeaconProtected {
 	
 	/*
-	 * takes a player as an argument
-	 * checks for tier four beacon
-	 * current beacon gets whitelist checked against player
-	 * location calculation
-	 * 		gets distance from beacon on the x and z axis
-	 * 		if values are both lower than range (within square radius) returns true
-	 * 
+	 * math and conditional checks, called from PlayerListener.java
 	 */
+	
 	private static Main p;
 	
 	public IsBeaconProtected() {
@@ -50,8 +45,11 @@ public class IsBeaconProtected {
 			double x = Math.abs(loc.getX() - location.getX());
 			double z = Math.abs(loc.getZ() - location.getZ());
 			
-			//hardcoding the range for now
-			if(x <= 10 && z <= 10) {
+			/*should probably add a configuration setting for the range
+			 * range is 37 because 32 block base radius + 5 blocks (which is the maximum distance a player can break blocks from) 
+			 * this ensures that you can't just stand 1 block outside a 32 block radius and mine blocks inside the protected area
+			 */
+			if(x <= 37 && z <= 37) {
 				return true;
 			}			
 		}	

@@ -13,6 +13,10 @@ import org.bukkit.persistence.PersistentDataType;
 
 import main.Main;
 
+/*
+ *  Utility class for serializing and deserializing objects for storage in PersistentDataContainers
+ */
+
 public class Serialize {
 	
 	private static Main plugin = Main.getPlugin();

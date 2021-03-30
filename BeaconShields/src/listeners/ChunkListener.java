@@ -1,6 +1,5 @@
 package listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.TileState;
@@ -15,7 +14,7 @@ import main.Main;
 public class ChunkListener implements Listener {
 	
 	/*
-	 * Have not implemented listeners for if the world is loaded/unloaded. however reloading the plugin will rescan the world
+	 * Have not implemented listeners for if the world is loaded/unloaded. however reloading the plugin will rescan all loaded chunks
 	 */
 	
 	Main p = Main.getPlugin();
@@ -29,9 +28,7 @@ public class ChunkListener implements Listener {
 				if(!(beaconState.getPersistentDataContainer().has(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY))) {
 					beaconState.getPersistentDataContainer().set(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, new byte[0]);
 					beaconState.update();
-					Bukkit.broadcastMessage("added key to beacon");
 				}
-				Bukkit.broadcastMessage("Loaded beacon");
 				return;
 			}
 		}
@@ -42,7 +39,6 @@ public class ChunkListener implements Listener {
 		for(BlockState state : e.getChunk().getTileEntities()) {
 			if(state instanceof Beacon && p.getBeacons().contains(state.getLocation())) {
 				p.getBeacons().remove(state.getLocation());
-				Bukkit.broadcastMessage("unloaded beacon");
 				return;
 			}
 		}

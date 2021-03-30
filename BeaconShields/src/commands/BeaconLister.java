@@ -9,6 +9,10 @@ import org.bukkit.entity.Player;
 
 import main.Main;
 
+/*
+ * A console only command that lists all beacons that the plugin has recognized, along with their coordinates
+ */
+
 public class BeaconLister implements CommandExecutor {
 
 	Main p = Main.getPlugin();

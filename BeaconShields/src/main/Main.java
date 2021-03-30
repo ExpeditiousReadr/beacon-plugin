@@ -21,7 +21,9 @@ import listeners.PlayerListener;
  * BEACONS V1
  * 
  * OVERVIEW:
- * provides a balanced replacement for the traditional
+ * beacons give mining fatigue to any player in a specified radius unless that player is on the whitelist for that beacon
+ * 
+ * if you have any bugs or suggestions let me know!
  * 
  * 
  */

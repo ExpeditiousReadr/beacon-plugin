@@ -25,9 +25,7 @@ import util.Serialize;
 public class PlayerListener implements Listener {
 
 	private Main plugin = Main.getPlugin();
-	private IsBeaconProtected checker = new IsBeaconProtected();
-	
-	
+	private IsBeaconProtected checker = new IsBeaconProtected();	
 	
 	@EventHandler
 	public void enterBeaconRadius(PlayerMoveEvent e) {
@@ -114,23 +112,6 @@ public class PlayerListener implements Listener {
 					}	
 				}
 			}
-		}		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		}			
+	}	
 }

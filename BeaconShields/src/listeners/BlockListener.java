@@ -1,6 +1,5 @@
 package listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.TileState;
 import org.bukkit.event.EventHandler;
@@ -21,7 +20,6 @@ public class BlockListener implements Listener {
 			return;
 		}		
 		p.getBeacons().remove(e.getBlock().getLocation());
-		Bukkit.broadcastMessage("beacon removed");
 	}
 	
 	@EventHandler
@@ -33,8 +31,7 @@ public class BlockListener implements Listener {
 		beaconState.getPersistentDataContainer().set(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, new byte[0]);
 		beaconState.update();
 		
-		p.getBeacons().add(e.getBlock().getLocation());
-		Bukkit.broadcastMessage("beacon added");			
+		p.getBeacons().add(e.getBlock().getLocation());			
 	}		
 }
 	
