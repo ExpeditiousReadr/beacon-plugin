@@ -33,10 +33,10 @@ public class PlayerListener implements Listener {
 			e.getFrom().getBlock().getZ() != e.getTo().getBlock().getZ()) {
 			Player p = e.getPlayer();
 			if(checker.isProtected(e.getTo(), p)) {			
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 3));
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 2));
 			}
 			else if(p.hasPotionEffect(PotionEffectType.SLOW_DIGGING) &&
-					p.getPotionEffect(PotionEffectType.SLOW_DIGGING).getAmplifier() == 3){
+					p.getPotionEffect(PotionEffectType.SLOW_DIGGING).getAmplifier() == 2){
 				
 				p.removePotionEffect(PotionEffectType.SLOW_DIGGING);
 			}			

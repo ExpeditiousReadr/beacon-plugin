@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 import main.Main;
+import util.Serialize;
 
 public class BlockListener implements Listener {
 	
@@ -29,6 +30,8 @@ public class BlockListener implements Listener {
 		}	
 		TileState beaconState = (TileState) e.getBlock().getState();
 		beaconState.getPersistentDataContainer().set(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, new byte[0]);
+		beaconState.getPersistentDataContainer().set(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, 
+				Serialize.DeserializeConcatAndSerialize(beaconState, e.getPlayer().getName()));
 		beaconState.update();
 		
 		p.getBeacons().add(e.getBlock().getLocation());			
