@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Beacon;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,6 +28,12 @@ public class PlayerListener implements Listener {
 
 	private Main plugin = Main.getPlugin();
 	private IsBeaconProtected checker = new IsBeaconProtected();	
+	
+	/*
+	 * feature or bug?
+	 * 
+	 * the beacon only has to be tier 4 to give mining fatigue, it doesn't have to be "activated" and have the beacon beam
+	 */
 	
 	@EventHandler
 	public void enterBeaconRadius(PlayerMoveEvent e) {
@@ -44,27 +52,40 @@ public class PlayerListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPaperClick(PlayerInteractEvent e) {
+	public void whitelistManager(PlayerInteractEvent e) {
 		
 		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if(e.getClickedBlock().getType().equals(Material.BEACON)) {
 				if(e.getPlayer().isSneaking()) {
 					if(e.getHand() == EquipmentSlot.HAND) {
-						if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.PAPER)) {
-							String playername = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
-							if(Bukkit.getPlayer(playername) != null) {
-								TileState beacon = (TileState)e.getClickedBlock().getState();
-								byte[] newKeyList = Serialize.DeserializeConcatAndSerialize(beacon, playername);
-								beacon.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, newKeyList);
-								beacon.update();
-								e.getPlayer().sendMessage(ChatColor.GREEN + "Added " + playername + " to whitelist");
-								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 100F, 10F);
-							}
-							else {
-								e.getPlayer().sendMessage(ChatColor.RED + "could not find player with the name " + playername);
-								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.2F, -10F);
+							
+						ItemStack heldItem = e.getPlayer().getInventory().getItemInMainHand();
+						
+						if(heldItem.getType().equals(Material.PAPER) || heldItem.getType().equals(Material.FLINT)) {
+							if(Bukkit.getPlayer(heldItem.getItemMeta().getDisplayName()) != null) {
+								
+								Beacon b = (Beacon) e.getClickedBlock().getState();
+								
+								if(heldItem.getType().equals(Material.PAPER)) {
+									byte[] newKeyList = Serialize.DeserializeConcatAndSerialize(b, heldItem.getItemMeta().getDisplayName());
+									b.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, newKeyList);
+									b.update();
+									e.getPlayer().sendMessage(ChatColor.GREEN + "Added " + heldItem.getItemMeta().getDisplayName() + " to whitelist");
+									e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_USE, 0.5F, 10F);
+								}
+								else {
+									byte[] key = Serialize.DeserializeRemoveAndSerialize(b, heldItem.getItemMeta().getDisplayName());
+									b.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, key);
+									b.update();
+									e.getPlayer().sendMessage(ChatColor.GRAY + "removed " + heldItem.getItemMeta().getDisplayName() + " from the whitelist");
+									e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, -5F);
+								}		
 							}	
-						}		
+							else {
+								e.getPlayer().sendMessage(ChatColor.RED + "Could not find any players with the name " + heldItem.getItemMeta().getDisplayName());
+								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, -5F);
+							}
+						}
 					}
 				}
 			}
@@ -92,26 +113,4 @@ public class PlayerListener implements Listener {
 			}
 		}		
 	}
-	
-	@EventHandler
-	public void onFlintClick(PlayerInteractEvent e) {
-		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			if(e.getPlayer().isSneaking()) {
-				if(e.getHand() == EquipmentSlot.HAND) {
-					if(e.getClickedBlock().getType().equals(Material.BEACON)) {
-						if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.FLINT)) {
-							
-							String name = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
-							TileState b = (TileState) e.getClickedBlock().getState();
-							byte[] key = Serialize.DeserializeRemoveAndSerialize(b, name);
-							b.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, key);
-							b.update();
-							e.getPlayer().sendMessage(ChatColor.GRAY + "removed " + name + " from the whitelist");
-							e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_USE, 0.5F, 4F);
-						}
-					}	
-				}
-			}
-		}			
-	}	
 }
