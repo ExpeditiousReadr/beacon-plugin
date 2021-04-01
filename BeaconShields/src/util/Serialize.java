@@ -62,7 +62,15 @@ public class Serialize {
 	
 	public static byte[] DeserializeConcatAndSerialize(TileState b,  String name) {
 		
-		List<String> keylist = deserializeNames(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+		List<String> keylist;
+		
+		if(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY) != null) {
+			keylist = deserializeNames(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+		}
+		else {
+			keylist = new ArrayList<String>();
+		}
+		
 		
 		//silent check for duplicates, probably should be somewhere else, but nowhere else has access to the deserialized list
 		if(!(keylist.contains(name))) {
@@ -74,7 +82,15 @@ public class Serialize {
 	
 	public static byte[] DeserializeRemoveAndSerialize(TileState b, String name) {
 		
-		List<String> keylist = deserializeNames(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+		List<String> keylist;
+		
+		if(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY) != null) {
+			keylist = deserializeNames(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+		}
+		else {
+			keylist = new ArrayList<String>();
+		}
+
 		
 		if(keylist.contains(name)) {
 			keylist.remove(name);
@@ -84,9 +100,18 @@ public class Serialize {
 	}
 	
 	
-	public static List<String> getWhitelist(byte[] key) {
+	public static List<String> getWhitelist(TileState b) {
 		
-		return deserializeNames(key);
+		List<String> keylist;
+		
+		if(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY) != null) {
+			keylist = deserializeNames(b.getPersistentDataContainer().get(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+		}
+		else {
+			keylist = new ArrayList<String>();
+		}
+		
+		return keylist;
 		
 	}
 	

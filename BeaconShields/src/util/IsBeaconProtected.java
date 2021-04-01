@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Beacon;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 
 import main.Main;
 
@@ -37,7 +36,7 @@ public class IsBeaconProtected {
 			if(b.getTier() != 4) {
 				continue;
 			}
-			List<String> whitelist = Serialize.getWhitelist(b.getPersistentDataContainer().get(p.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY));
+			List<String> whitelist = Serialize.getWhitelist(b);
 			if(whitelist.contains(player.getName())) {
 				continue;
 			}

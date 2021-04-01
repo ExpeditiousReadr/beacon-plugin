@@ -70,19 +70,19 @@ public class PlayerListener implements Listener {
 									byte[] newKeyList = Serialize.DeserializeConcatAndSerialize(b, heldItem.getItemMeta().getDisplayName());
 									b.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, newKeyList);
 									b.update();
-									e.getPlayer().sendMessage(ChatColor.GREEN + "Added " + heldItem.getItemMeta().getDisplayName() + " to whitelist");
+									e.getPlayer().sendMessage(ChatColor.BLUE + "[Beacon]" + ChatColor.WHITE + " Added " + heldItem.getItemMeta().getDisplayName() + " to whitelist");
 									e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_USE, 0.5F, 10F);
 								}
 								else {
 									byte[] key = Serialize.DeserializeRemoveAndSerialize(b, heldItem.getItemMeta().getDisplayName());
 									b.getPersistentDataContainer().set(plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY, key);
 									b.update();
-									e.getPlayer().sendMessage(ChatColor.GRAY + "removed " + heldItem.getItemMeta().getDisplayName() + " from the whitelist");
+									e.getPlayer().sendMessage(ChatColor.BLUE + "[Beacon]" + ChatColor.WHITE + " Removed " + heldItem.getItemMeta().getDisplayName() + " from the whitelist");
 									e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, -5F);
 								}		
 							}	
 							else {
-								e.getPlayer().sendMessage(ChatColor.RED + "Could not find any players with the name " + heldItem.getItemMeta().getDisplayName());
+								e.getPlayer().sendMessage(ChatColor.BLUE + "[Beacon]" + ChatColor.RED + " Could not find any players with the name " + heldItem.getItemMeta().getDisplayName());
 								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 1F, -5F);
 							}
 						}
@@ -100,12 +100,9 @@ public class PlayerListener implements Listener {
 					if(e.getClickedBlock().getType().equals(Material.BEACON)) {
 						if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.BOOK)) {
 							
-							TileState b = (TileState) e.getClickedBlock().getState();
-							e.getPlayer().sendMessage(
-								Arrays.toString(
-									Serialize.getWhitelist(
-										b.getPersistentDataContainer().get(
-											plugin.getBeaconWhitelist(), PersistentDataType.BYTE_ARRAY)).toArray()));
+							TileState b = (TileState) e.getClickedBlock().getState();							
+							
+							e.getPlayer().sendMessage(Arrays.toString(Serialize.getWhitelist(b).toArray()));
 							e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 3F, -100F);
 						}
 					}	
